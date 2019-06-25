@@ -1,0 +1,45 @@
+<h1>Heading with <em>italics</em></h1>
+Will produce
+<h1>Heading with <em>italics</em></h1>
+
+
+<p><strong>Bold</strong> paragraph</p>
+Output
+<p><strong>Bold</strong> paragraph</p>
+
+It also handles markdown in child elements
+<body><div class="overflow">
+<table>
+<thead>
+<tr>
+<th>Head</th>
+<th>row</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Data</td>
+<td>row</td>
+</tr>
+</tbody></table>
+</div></body>
+
+You do need extra empty lines around markdown in unmarked `div`s
+This will look like
+<body>
+	<div class="overflow">
+		<table>
+		<thead>
+		<tr>
+		<th>Head</th>
+		<th>row</th>
+		</tr>
+		</thead>
+		<tbody>
+		<tr>
+		<th>Data</th>
+		<th>row</th>
+		</tr>
+		</tbody>
+		</table>
+	</div>
+</body>
