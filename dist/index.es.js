@@ -41,7 +41,7 @@ function index (ref) {
 		// Line numbering changes after conversion to markdown, so try to
 		// generate a unique identifier for the line based on (content - markup)
 		var tokenize = function (line) {
-			var token = line.replace(/(<.+?\/?>)|(#|\*|_|-)|(\(.+?\))|(\[|\])|\s/g, '');
+			var token = line.replace(/(<.+?>)|(#|\*|_|-|>|!)|(\(.+?\))|(\[|\])|\s/g, '');
 			if (token) { return token; }
 			else if (!empty(line)) { return line; }
 			return '';
@@ -86,6 +86,8 @@ function index (ref) {
 	return new Promise(function (resolve) {
 		tree.match(matcher('md, markdown, [md], [markdown]'), function (node) {
 			var html = render(node.content);
+			// Fix for blockquotes, restore '>' characters
+			html = html.replace(/(?<=\s)&gt;/gm, '>');
 			// Detect line endings
 			var newline = html.includes('\r') && html.split('\r\n').length === html.split('\n').length
 				? '\r\n'
@@ -107,7 +109,12 @@ function index (ref) {
 				// Since we're removing the parent tag
 				// remove extra indentation
 				markdown = markdown.trim();
+			} else if (!(/^\s/g.test(markdown)) && node.content.length === 1) {
+				var prevIndent = /^(\s+)/g.exec(node.content[0]) || [];
+				markdown = "" + (prevIndent[0]) + markdown;
 			}
+			// Fix for blockquotes, return remaining '>' characters to entities
+			markdown = markdown.replace(/(?<=<)(.+?)(&gt;)/gm, '$1>');
 			var newNode = parser(markdown);
 			node.content = newNode;
 			if (replaced.includes(node.tag)) {
