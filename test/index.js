@@ -73,4 +73,15 @@ describe('posthtml-markdown', () => {
 			throw err;
 		}
 	});
+
+	it('Handles blockquote correctly', async () => {
+		const file = 'blockquote';
+		const output = await posthtmlOutput(file);
+		try {
+			assert(output === expect(file));
+		} catch (err) {
+			writeOut(file, output);
+			throw err;
+		}
+	});
 });

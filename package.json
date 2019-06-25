@@ -1,6 +1,6 @@
 {
   "name": "posthtml-markdown",
-  "version": "0.1.0-beta0",
+  "version": "0.1.0-beta1",
   "description": "Render markdown inside html elements",
   "main": "dist/index.js",
   "scripts": {
