@@ -73,8 +73,8 @@ export default ({whitespace = '\t', ...options}) => ((tree) => {
 	return new Promise((resolve) => {
 		tree.match(matcher('md, markdown, [md], [markdown]'), (node) => {
 			let html = render(node.content);
-			// Fix for blockquotes, restore '>' characters
-			html = html.replace(/(?<=\s)&gt;/gm, '>');
+			// Fix for blockquotes and raw html
+			html = html.replace(/&gt;/gm, '>').replace(/&lt;/gm, '<');
 			// Detect line endings
 			const newline = html.includes('\r') && html.split('\r\n').length === html.split('\n').length
 				? '\r\n'
@@ -100,8 +100,6 @@ export default ({whitespace = '\t', ...options}) => ((tree) => {
 				const prevIndent = /^(\s+)/g.exec(node.content[0]) || [];
 				markdown = `${prevIndent[0]}${markdown}`;
 			}
-			// Fix for blockquotes, return remaining '>' characters to entities
-			markdown = markdown.replace(/(?<=<)(.+?)(&gt;)/gm, '$1>');
 			const newNode = parser(markdown);
 			node.content = newNode;
 			if (replaced.includes(node.tag)) {

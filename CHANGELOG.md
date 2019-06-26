@@ -9,6 +9,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 
+## [0.1.0-beta2] - 2019-06-26
+
+### Fixed
+
+- blockquote bug also affected raw html inside markdown
+
+
 ## [0.1.0-beta1] - 2019-06-25
 
 ### Fixed
