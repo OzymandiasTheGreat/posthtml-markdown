@@ -5,7 +5,7 @@ import pkg from './package.json';
 
 
 module.exports = {
-	external: [...Object.keys(pkg.dependencies)],
+	external: ['lean-he/decode', ...Object.keys(pkg.dependencies)],
 	input: 'src/index.js',
 	output: [
 		{

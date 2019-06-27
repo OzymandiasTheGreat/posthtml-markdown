@@ -9,6 +9,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 
+## [0.1.0-rc0] - 2019-06-27
+
+## Added
+
+- Now depends on lean-he for full html entity handling
+
+## Fixed
+
+- Finally handles all the html entities
+- Whitespace in pre tags was out of whack
+
+
 ## [0.1.0-beta3] - 2019-06-27
 
 ### Fixed

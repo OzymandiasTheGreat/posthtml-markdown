@@ -2,6 +2,7 @@ import parser from 'posthtml-parser';
 import render from 'posthtml-render';
 import matcher from 'posthtml-match-helper';
 import marked from 'marked';
+import unescape from 'lean-he/decode';
 
 
 export default ({whitespace = '\t', ...options}) => ((tree) => {
@@ -48,13 +49,17 @@ export default ({whitespace = '\t', ...options}) => ((tree) => {
 
 		const processed = marked(trimmed.join(newline), options);
 		const restored = [];
+		let pre = false;
 		let currIndent = 0;
 		for (let line of processed.split(newline)) {
 			if (!empty(line)) {
+				if (line.includes('<pre>')) pre = true;
 				if (Object.keys(prepend).includes(tokenize(line))) {
 					currIndent = prepend[tokenize(line)] || currIndent;
 				}
-				restored.push(`${indentation.repeat(currIndent)}${line}`);
+				if (pre) restored.push(line);
+				else restored.push(`${indentation.repeat(currIndent)}${line}`);
+				if (line.includes('</pre>')) pre = false;
 			}
 		}
 		return restored[0].startsWith(indentation)
@@ -64,22 +69,36 @@ export default ({whitespace = '\t', ...options}) => ((tree) => {
 
 	const discardWhitespace = (string, newline) => {
 		const trimmed = [];
+		let pre = false;
 		for (let line of string.split(newline)) {
-			trimmed.push(line.trim());
+			if (line.includes('<pre>')) pre = true;
+			if (pre) trimmed.push(line);
+			else trimmed.push(line.trim());
+			if (line.includes('</pre>')) pre = false;
 		}
 		return marked(trimmed.join(newline), options).replace(new RegExp(newline, 'gm'), '');
 	};
 
+	const revertEntities = (node) => {
+		if (node.content) {
+			for (let i = 0; i < node.content.length; i++) {
+				let line = node.content[i];
+				if (typeof line === 'string') node.content[i] = unescape(line);
+				else {
+					node.content[i] = revertEntities(line);
+				}
+			}
+			return node;
+		} else if (typeof node === 'string') {
+			return unescape(node);
+		}
+		return node;
+	};
+
 	return new Promise((resolve) => {
 		tree.match(matcher('md, markdown, [md], [markdown]'), (node) => {
-			let html = render(node.content);
 			// Fix for blockquotes and raw html
-			html = html.replace(/&gt;/gm, '>')
-				.replace(/&lt;/gm, '<')
-				.replace(/&quot;/gm, '"')
-				.replace(/&apos;/gm, '\'')
-				.replace(/&amp;/gm, '&');
-			// Detect line endings
+			const html = unescape(render(node.content));
 			const newline = html.includes('\r') && html.split('\r\n').length === html.split('\n').length
 				? '\r\n'
 				: '\n';
@@ -101,11 +120,14 @@ export default ({whitespace = '\t', ...options}) => ((tree) => {
 				// remove extra indentation
 				markdown = markdown.trim();
 			} else if (!(/^\s/g.test(markdown)) && node.content.length === 1) {
-				const prevIndent = /^(\s+)/g.exec(node.content[0]) || [];
+				const prevIndent = /^(\s+)/g.exec(node.content[0]) || [''];
 				markdown = `${prevIndent[0]}${markdown}`;
 			}
-			const newNode = parser(markdown);
-			node.content = newNode;
+			const newContent = [];
+			for (let newNode of parser(markdown)) {
+				newContent.push(revertEntities(newNode));
+			}
+			node.content = newContent;
 			if (replaced.includes(node.tag)) {
 				// Remove tag
 				node.tag = false;
