@@ -87,7 +87,11 @@ function index (ref) {
 		tree.match(matcher('md, markdown, [md], [markdown]'), function (node) {
 			var html = render(node.content);
 			// Fix for blockquotes and raw html
-			html = html.replace(/&gt;/gm, '>').replace(/&lt;/gm, '<');
+			html = html.replace(/&gt;/gm, '>')
+				.replace(/&lt;/gm, '<')
+				.replace(/&quot;/gm, '"')
+				.replace(/&apos;/gm, '\'')
+				.replace(/&amp;/gm, '&');
 			// Detect line endings
 			var newline = html.includes('\r') && html.split('\r\n').length === html.split('\n').length
 				? '\r\n'

@@ -1,8 +1,9 @@
 {
   "name": "posthtml-markdown",
-  "version": "0.1.0-beta2",
-  "description": "Render markdown inside html elements",
+  "version": "0.1.0-beta3",
+  "description": "Render markdown inside html elements and seemlessly mix html and markdown content",
   "main": "dist/index.js",
+  "module": "dist/index.es.js",
   "scripts": {
     "test": "mocha -r esm test/index.js",
     "build": "rollup -c"

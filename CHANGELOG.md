@@ -9,6 +9,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 
+## [0.1.0-beta3] - 2019-06-27
+
+### Fixed
+
+- More characters where being transformed to html entities
+
+
 ## [0.1.0-beta2] - 2019-06-26
 
 ### Fixed
