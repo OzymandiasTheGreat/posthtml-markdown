@@ -62,7 +62,8 @@ This will look like
 
 All options are passed to [marked](https://github.com/markedjs/marked) directly, except for:
 
-- `whitespce (boolean | string; default: '\t')`: String to use for indentation. If it's boolean, either tab will be used or whitespace won't be preserved at all. Set it to `false` to speed up build when using minifier.
+- `whitespce (string; default: '\t')`: String to use for indentation. It should
+consist of characters representing one level of indentation.
 
 
 ## Install

@@ -9,6 +9,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 
+## [0.1.0-rc1] - 2019-06-28
+
+## Removed
+
+- Non-string whitespace option. It was more complicated than it's worth and
+this is better handled by minifiers.
+
+
 ## [0.1.0-rc0] - 2019-06-27
 
 ## Added

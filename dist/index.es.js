@@ -16,12 +16,8 @@ function index (ref) {
 	var replaced = ['markdown', 'md', 'pre'];
 	var stripped = ['a', 'abbr', 'address', 'b','bdo', 'bdi', 'button', 'cite', 'data', 'details', 'dfn', 'em', 'fieldset', 'figure', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'i', 'kbd', 'label', 'mark', 'p', 'q', 's', 'samp', 'small', 'span', 'strong', 'sub', 'sup', 'time'];
 	var indentation = typeof whitespace === 'string'
-		? whitespace
-		: typeof whitespace === 'number'
-			? ' '.repeat(whitespace)
-			: typeof whitespace === 'boolean' && whitespace === true
-				? '\t'
-				: false;
+		? whitespace || '\t'
+		: '\t';
 
 	var preserveWhitespace = function (string, newline) {
 		// If line consists of whitespace only, consider it empty
@@ -78,20 +74,6 @@ function index (ref) {
 			: ("" + (restored.join(newline)) + (trail(string)));
 	};
 
-	var discardWhitespace = function (string, newline) {
-		var trimmed = [];
-		var pre = false;
-		for (var i = 0, list = string.split(newline); i < list.length; i += 1) {
-			var line = list[i];
-
-			if (line.includes('<pre>')) { pre = true; }
-			if (pre) { trimmed.push(line); }
-			else { trimmed.push(line.trim()); }
-			if (line.includes('</pre>')) { pre = false; }
-		}
-		return marked(trimmed.join(newline), options).replace(new RegExp(newline, 'gm'), '');
-	};
-
 	var revertEntities = function (node) {
 		if (node.content) {
 			for (var i = 0; i < node.content.length; i++) {
@@ -115,9 +97,7 @@ function index (ref) {
 			var newline = html.includes('\r') && html.split('\r\n').length === html.split('\n').length
 				? '\r\n'
 				: '\n';
-			var markdown = whitespace
-				? preserveWhitespace(html, newline)
-				: discardWhitespace(html, newline);
+			var markdown = preserveWhitespace(html, newline);
 			if (stripped.includes(node.tag)
 					|| (node.tag === 'pre'
 					&& !(Object.keys(node.attrs).includes('md')

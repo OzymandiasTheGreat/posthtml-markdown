@@ -9,12 +9,8 @@ export default ({whitespace = '\t', ...options}) => ((tree) => {
 	const replaced = ['markdown', 'md', 'pre'];
 	const stripped = ['a', 'abbr', 'address', 'b','bdo', 'bdi', 'button', 'cite', 'data', 'details', 'dfn', 'em', 'fieldset', 'figure', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'i', 'kbd', 'label', 'mark', 'p', 'q', 's', 'samp', 'small', 'span', 'strong', 'sub', 'sup', 'time'];
 	const indentation = typeof whitespace === 'string'
-		? whitespace
-		: typeof whitespace === 'number'
-			? ' '.repeat(whitespace)
-			: typeof whitespace === 'boolean' && whitespace === true
-				? '\t'
-				: false;
+		? whitespace || '\t'
+		: '\t';
 
 	const preserveWhitespace = (string, newline) => {
 		// If line consists of whitespace only, consider it empty
@@ -67,18 +63,6 @@ export default ({whitespace = '\t', ...options}) => ((tree) => {
 			: `${restored.join(newline)}${trail(string)}`;
 	};
 
-	const discardWhitespace = (string, newline) => {
-		const trimmed = [];
-		let pre = false;
-		for (let line of string.split(newline)) {
-			if (line.includes('<pre>')) pre = true;
-			if (pre) trimmed.push(line);
-			else trimmed.push(line.trim());
-			if (line.includes('</pre>')) pre = false;
-		}
-		return marked(trimmed.join(newline), options).replace(new RegExp(newline, 'gm'), '');
-	};
-
 	const revertEntities = (node) => {
 		if (node.content) {
 			for (let i = 0; i < node.content.length; i++) {
@@ -102,9 +86,7 @@ export default ({whitespace = '\t', ...options}) => ((tree) => {
 			const newline = html.includes('\r') && html.split('\r\n').length === html.split('\n').length
 				? '\r\n'
 				: '\n';
-			let markdown = whitespace
-				? preserveWhitespace(html, newline)
-				: discardWhitespace(html, newline);
+			let markdown = preserveWhitespace(html, newline);
 			if (stripped.includes(node.tag)
 					|| (node.tag === 'pre'
 					&& !(Object.keys(node.attrs).includes('md')

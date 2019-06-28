@@ -62,7 +62,7 @@ describe('posthtml-markdown', () => {
 	it('Accepts custom options', async () => {
 		const file = 'options';
 		const output = await posthtmlOutput(file, {
-			whitespace: false,
+			whitespace: '  ',
 			breaks: true,
 			headerIds: false,
 		});
