@@ -12,6 +12,7 @@ function objectWithoutProperties (obj, exclude) { var target = {}; for (var k in
 
 
 function index (ref) {
+	if ( ref === void 0 ) ref = {};
 	var whitespace = ref.whitespace; if ( whitespace === void 0 ) whitespace = '\t';
 	var rest = objectWithoutProperties( ref, ["whitespace"] );
 	var options = rest;

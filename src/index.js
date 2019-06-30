@@ -5,7 +5,7 @@ import marked from 'marked';
 import unescape from 'lean-he/decode';
 
 
-export default ({whitespace = '\t', ...options}) => ((tree) => {
+export default ({whitespace = '\t', ...options} = {}) => ((tree) => {
 	const replaced = ['markdown', 'md', 'pre'];
 	const stripped = ['a', 'abbr', 'address', 'b','bdo', 'bdi', 'button', 'cite', 'data', 'details', 'dfn', 'em', 'fieldset', 'figure', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'i', 'kbd', 'label', 'mark', 'p', 'q', 's', 'samp', 'small', 'span', 'strong', 'sub', 'sup', 'time'];
 	const indentation = typeof whitespace === 'string'

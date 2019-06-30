@@ -59,6 +59,17 @@ describe('posthtml-markdown', () => {
 		}
 	});
 
+	it('Works without options object', async () => {
+		const file = 'no_options';
+		const output = await posthtmlOutput(file, undefined);
+		try {
+			assert(output === expect(file));
+		} catch (err) {
+			writeOut(file, output);
+			throw err;
+		}
+	});
+
 	it('Accepts custom options', async () => {
 		const file = 'options';
 		const output = await posthtmlOutput(file, {
