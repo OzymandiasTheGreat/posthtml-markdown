@@ -1,10 +1,17 @@
 # PostHTML-Markdown
 
+-------------------
+
+If you find this software useful, [consider becoming a patron](https://www.patreon.com/ozymandias)
+
+-------------------
+
 [posthtml-markdown](https://github.com/OzymandiasTheGreat/posthtml-markdown) is a markdown plugin for [posthtml](https://github.com/posthtml/posthtml) that let's you use [markdown](https://github.github.com/gfm/) inside html elements easily.
 
 There's already [posthtml-md](https://github.com/jonathantneal/posthtml-md), but it has long standing bugs and the codebase is more complicated than necessary and prone to breakage.
 
 This plugin:
+
 - recognizes any tag with `md` or `markdown` attribute (attribute is removed)
 - recognizes `md` and `markdown` tags (tag is removed)
 - treats `pre` tags with `md` or `markdown` attribute as `markdown` tags
