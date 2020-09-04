@@ -18,7 +18,7 @@
   "license": "MIT",
   "dependencies": {
     "lean-he": "^2.1.2",
-    "marked": "^0.6.2",
+    "marked": "^0.7.0",
     "posthtml-match-helper": "^1.0.1",
     "posthtml-parser": "^0.4.1",
     "posthtml-render": "^1.1.5"
